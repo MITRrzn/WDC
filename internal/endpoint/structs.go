@@ -8,8 +8,15 @@ type Input struct {
 }
 
 type Response struct {
-	Status string         `json:"status"`
-	Data   EndpointStruct `json:"data"`
+	Status string       `json:"status"`
+	Data   ResponseData `json:"data"`
+}
+
+type ResponseData struct {
+	Url       string
+	IsActive  bool
+	CreatedAt time.Time
+	UpdatedAt time.Time
 }
 
 type EndpointStruct struct {

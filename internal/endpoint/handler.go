@@ -44,7 +44,12 @@ func (h *EndpointHandler) CreateEndpoint(w http.ResponseWriter, r *http.Request)
 	w.WriteHeader(http.StatusCreated)
 	encodeErr := json.NewEncoder(w).Encode(Response{
 		Status: "OK",
-		Data:   result,
+		Data: ResponseData{
+			Url:       result.Url,
+			IsActive:  result.IsActive,
+			CreatedAt: result.CreatedAt,
+			UpdatedAt: result.UpdatedAt,
+		},
 	})
 	if encodeErr != nil {
 		log.Println("encode response error:", encodeErr)

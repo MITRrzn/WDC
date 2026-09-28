@@ -33,7 +33,7 @@ func main() {
 
 	endpointRepo := endpointRepository.NewRepository(db)
 	endpointSvc := endpoint.NewService(endpointRepo)
-	endpointHandler := endpoint.NewHandler(*endpointSvc)
+	endpointHandler := endpoint.NewHandler(endpointSvc)
 
 	mux.HandleFunc("POST /endpoints", endpointHandler.CreateEndpoint)
 	//mux.HandleFunc("GET /endpoints/{id}", endpointHandler.GetEndpoint)
