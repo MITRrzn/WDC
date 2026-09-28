@@ -36,10 +36,12 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
+    env_file:
+      - .env
     command: ["/app/api"]
     environment:
-      APP_PORT: "8080"
-      DATABASE_URL: "postgres://postgres:postgres@postgres:5432/webhooks?sslmode=disable"
+      APP_PORT: ${APP_PORT}
+      DATABASE_URL: ${DB_URL}
       DELIVERY_TIMEOUT: "5s"
       MAX_ATTEMPTS: "10"
       RETRY_BASE_DELAY: "5s"
@@ -56,8 +58,10 @@ services:
       context: .
       dockerfile: Dockerfile
     command: ["/app/worker"]
+    env_file:
+      - .env
     environment:
-      DATABASE_URL: "postgres://postgres:postgres@postgres:5432/webhooks?sslmode=disable"
+      DATABASE_URL: ${DB_URL}
       DELIVERY_TIMEOUT: "5s"
       MAX_ATTEMPTS: "10"
       RETRY_BASE_DELAY: "5s"
