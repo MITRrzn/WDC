@@ -2,6 +2,8 @@ package endpoint
 
 import (
 	"context"
+	"database/sql"
+	"errors"
 	"net/url"
 )
 
@@ -36,6 +38,9 @@ func (e EndpointService) Get(ctx context.Context, id int64) (EndpointStruct, err
 
 	result, err := e.repo.Get(ctx, id)
 	if err != nil {
+		if errors.Is(err, sql.ErrNoRows) {
+			return EndpointStruct{}, NotFoundError{Message: "endpoint not found"}
+		}
 		return EndpointStruct{}, err
 	}
 

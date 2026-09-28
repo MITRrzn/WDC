@@ -4,6 +4,7 @@ import (
 	"WDC/internal/endpoint"
 	"context"
 	"database/sql"
+	"errors"
 	"fmt"
 )
 
@@ -43,6 +44,9 @@ func (r Repository) Get(ctx context.Context, id int64) (endpoint.EndpointStruct,
 	).Scan(&result.Url, &result.IsActive, &result.CreatedAt, &result.UpdatedAt)
 
 	if err != nil {
+		if errors.Is(err, sql.ErrNoRows) {
+			return endpoint.EndpointStruct{}, err
+		}
 		return endpoint.EndpointStruct{}, fmt.Errorf("get endpoint error: %w", err)
 	}
 

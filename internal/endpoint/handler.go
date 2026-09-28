@@ -70,8 +70,14 @@ func (h *EndpointHandler) Get(w http.ResponseWriter, r *http.Request) {
 
 	if err != nil {
 		var validationErr ValidationError
+		var notFoundErr NotFoundError
+
 		if errors.As(err, &validationErr) {
 			helper.WriteErrorResponse(w, err.Error(), http.StatusBadRequest)
+			return
+		}
+		if errors.As(err, &notFoundErr) {
+			helper.WriteErrorResponse(w, err.Error(), http.StatusNotFound)
 			return
 		}
 
