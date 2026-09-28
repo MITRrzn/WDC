@@ -6,6 +6,7 @@ import (
 	"errors"
 	"log"
 	"net/http"
+	"strconv"
 )
 
 type EndpointHandler struct {
@@ -24,7 +25,7 @@ func (h *EndpointHandler) CreateEndpoint(w http.ResponseWriter, r *http.Request)
 
 	if decodeErr != nil {
 		log.Println("Create endpoint, error decode input data", decodeErr)
-		http.Error(w, decodeErr.Error(), http.StatusBadRequest)
+		http.Error(w, "invalid data", http.StatusBadRequest)
 		return
 	}
 
@@ -54,4 +55,44 @@ func (h *EndpointHandler) CreateEndpoint(w http.ResponseWriter, r *http.Request)
 	if encodeErr != nil {
 		log.Println("encode response error:", encodeErr)
 	}
+}
+
+func (h *EndpointHandler) Get(w http.ResponseWriter, r *http.Request) {
+	reqId := r.PathValue("id")
+	id, parseErr := strconv.ParseInt(reqId, 10, 64)
+	if parseErr != nil {
+		log.Println("invalid endpoint id:", parseErr)
+		helper.WriteErrorResponse(w, "invalid endpoint id", http.StatusBadRequest)
+		return
+	}
+
+	result, err := h.service.Get(r.Context(), id)
+
+	if err != nil {
+		var validationErr ValidationError
+		if errors.As(err, &validationErr) {
+			helper.WriteErrorResponse(w, err.Error(), http.StatusBadRequest)
+			return
+		}
+
+		log.Println("get response error:", err)
+		helper.WriteErrorResponse(w, "something goes wrong", http.StatusInternalServerError)
+		return
+	}
+
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(http.StatusOK)
+	encodeErr := json.NewEncoder(w).Encode(Response{
+		Status: "OK",
+		Data: ResponseData{
+			Url:       result.Url,
+			IsActive:  result.IsActive,
+			CreatedAt: result.CreatedAt,
+			UpdatedAt: result.UpdatedAt,
+		},
+	})
+	if encodeErr != nil {
+		log.Println("encode response error:", encodeErr)
+	}
+
 }

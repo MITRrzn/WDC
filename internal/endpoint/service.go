@@ -29,6 +29,19 @@ func (e EndpointService) Create(ctx context.Context, input Input) (EndpointStruc
 	return result, nil
 }
 
+func (e EndpointService) Get(ctx context.Context, id int64) (EndpointStruct, error) {
+	if id <= 0 {
+		return EndpointStruct{}, ValidationError{Message: "invalid id"}
+	}
+
+	result, err := e.repo.Get(ctx, id)
+	if err != nil {
+		return EndpointStruct{}, err
+	}
+
+	return result, nil
+}
+
 func validateInput(input Input) error {
 	if input.Url == "" {
 		return ValidationError{Message: "url is required"}

@@ -36,7 +36,7 @@ func main() {
 	endpointHandler := endpoint.NewHandler(endpointSvc)
 
 	mux.HandleFunc("POST /endpoints", endpointHandler.CreateEndpoint)
-	//mux.HandleFunc("GET /endpoints/{id}", endpointHandler.GetEndpoint)
+	mux.HandleFunc("GET /endpoints/{id}", endpointHandler.Get)
 
 	//mux.HandleFunc("POST /events", eventsHandler.CreateEvent)
 

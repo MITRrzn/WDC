@@ -32,3 +32,19 @@ func (r Repository) Create(ctx context.Context, input endpoint.Input) (endpoint.
 
 	return result, nil
 }
+
+func (r Repository) Get(ctx context.Context, id int64) (endpoint.EndpointStruct, error) {
+	var result endpoint.EndpointStruct
+
+	err := r.db.QueryRowContext(
+		ctx,
+		`SELECT url, is_active, created_at, updated_at FROM endpoints WHERE id = $1`,
+		id,
+	).Scan(&result.Url, &result.IsActive, &result.CreatedAt, &result.UpdatedAt)
+
+	if err != nil {
+		return endpoint.EndpointStruct{}, fmt.Errorf("get endpoint error: %w", err)
+	}
+
+	return result, nil
+}
