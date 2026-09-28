@@ -45,7 +45,7 @@ func (r Repository) Get(ctx context.Context, id int64) (endpoint.EndpointStruct,
 
 	if err != nil {
 		if errors.Is(err, sql.ErrNoRows) {
-			return endpoint.EndpointStruct{}, err
+			return endpoint.EndpointStruct{}, endpoint.NotFoundError{Message: "endpoint not found"}
 		}
 		return endpoint.EndpointStruct{}, fmt.Errorf("get endpoint error: %w", err)
 	}
