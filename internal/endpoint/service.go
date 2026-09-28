@@ -1,11 +1,11 @@
 package endpoint
 
-import "WDC/internal/repository/endpoint"
-
 type EndpointService struct {
-	repo endpoint.Repository
+	repo EndpointRepository
 }
 
-func NewService(repo endpoint.Repository) *EndpointService {
-	return &EndpointService{repo: repo}
+func NewService(repo EndpointRepository) *EndpointService {
+	return &EndpointService{
+		repo: repo,
+	}
 }

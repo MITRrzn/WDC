@@ -35,8 +35,8 @@ func main() {
 	endpointSvc := endpoint.NewService(endpointRepo)
 	endpointHandler := endpoint.NewHandler(endpointSvc)
 
-	mux.HandleFunc("POST /endpoint", endpointHandler.CreateEndpoint)
-	//mux.HandleFunc("GET /endpoint/{id}", endpointHandler.GetEndpoint)
+	mux.HandleFunc("POST /endpoints", endpointHandler.CreateEndpoint)
+	//mux.HandleFunc("GET /endpoints/{id}", endpointHandler.GetEndpoint)
 
 	//mux.HandleFunc("POST /events", eventsHandler.CreateEvent)
 
