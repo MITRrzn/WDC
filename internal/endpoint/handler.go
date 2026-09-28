@@ -3,7 +3,7 @@ package endpoint
 import "net/http"
 
 type EndpointHandler struct {
-	service EndpointService
+	service ServiceInterface
 }
 
 func NewHandler(service EndpointService) *EndpointHandler {
