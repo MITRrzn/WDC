@@ -3,5 +3,5 @@ package endpoint
 import "context"
 
 type EndpointRepository interface {
-	Create(ctx context.Context, endpoint Endpoint) error
+	Create(ctx context.Context, endpoint EndpointStruct) error
 }
