@@ -4,6 +4,7 @@ import (
 	"WDC/internal/endpoint"
 	"context"
 	"database/sql"
+	"fmt"
 )
 
 type Repository struct {
@@ -14,7 +15,20 @@ func NewRepository(db *sql.DB) Repository {
 	return Repository{db: db}
 }
 
-func (r Repository) Create(ctx context.Context, endpoint endpoint.EndpointStruct) error {
-	//TODO implement me
-	panic("implement me")
+func (r Repository) Create(ctx context.Context, input endpoint.Input) (endpoint.EndpointStruct, error) {
+	var result endpoint.EndpointStruct
+
+	err := r.db.QueryRowContext(
+		ctx,
+		`INSERT INTO endpoints (url, secret, is_active) VALUES ($1, $2, $3) RETURNING url, secret, is_active, created_at, updated_at`,
+		input.Url,
+		input.Secret,
+		true,
+	).Scan(&result.Url, &result.Secret, &result.IsActive, &result.CreatedAt, &result.UpdatedAt)
+
+	if err != nil {
+		return endpoint.EndpointStruct{}, fmt.Errorf("create endpoint error: %w", err)
+	}
+
+	return result, nil
 }

@@ -2,7 +2,7 @@ package main
 
 import (
 	"WDC/internal/database"
-	endpoint "WDC/internal/endpoint"
+	"WDC/internal/endpoint"
 	endpointRepository "WDC/internal/repository/endpoint"
 	"context"
 	"errors"
